@@ -1,4 +1,7 @@
-package com.jme3.scene;
+package com.jme3.scene.node;
+
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 
 /**
  * An abstract class for implementations that perform grouping of geometries
@@ -9,14 +12,14 @@ package com.jme3.scene;
 public abstract class GeometryGroupNode extends Node {
     
     public static int getGeometryStartIndex(Geometry geom) {
-        return geom.startIndex;
+        return geom.getStartIndex();
     }
     
     protected static void setGeometryStartIndex(Geometry geom, int startIndex) {
         if (startIndex < -1) {
             throw new AssertionError();
         }
-        geom.startIndex = startIndex;
+        geom.setStartIndex(startIndex);
     }
     
     /**

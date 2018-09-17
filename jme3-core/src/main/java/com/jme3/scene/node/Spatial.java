@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene;
+package com.jme3.scene.node;
 
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.CloneableSmartAsset;
@@ -47,6 +47,10 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
+import com.jme3.scene.SceneGraphVisitor;
+import com.jme3.scene.UserData;
 import com.jme3.scene.control.Control;
 import com.jme3.util.clone.Cloner;
 import com.jme3.util.clone.IdentityCloneFunction;
@@ -657,7 +661,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * Computes the world transform of this Spatial in the most
      * efficient manner possible.
      */
-    void checkDoTransformUpdate() {
+    protected void checkDoTransformUpdate() {
         if ((refreshFlags & RF_TRANSFORM) == 0) {
             return;
         }
@@ -706,7 +710,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * Computes this Spatial's world bounding volume in the most efficient
      * manner possible.
      */
-    void checkDoBoundUpdate() {
+    protected void checkDoBoundUpdate() {
         if ((refreshFlags & RF_BOUND) == 0) {
             return;
         }
@@ -1808,7 +1812,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Visit each scene graph element ordered by DFS with the default post order mode.
      * @param visitor
-     * @see #depthFirstTraversal(com.jme3.scene.SceneGraphVisitor, com.jme3.scene.Spatial.DFSMode) 
+     * @see #depthFirstTraversal(com.jme3.scene.SceneGraphVisitor, com.jme3.scene.node.Spatial.DFSMode) 
      */
     public void depthFirstTraversal(SceneGraphVisitor visitor) {
         depthFirstTraversal(visitor, DFSMode.POST_ORDER);
