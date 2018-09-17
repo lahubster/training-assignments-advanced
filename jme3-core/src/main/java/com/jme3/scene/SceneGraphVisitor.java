@@ -31,6 +31,8 @@
  */
 package com.jme3.scene;
 
+import com.jme3.scene.node.Spatial;
+
 /**
  * <code>SceneGraphVisitorAdapter</code> is used to traverse the scene
  * graph tree. 

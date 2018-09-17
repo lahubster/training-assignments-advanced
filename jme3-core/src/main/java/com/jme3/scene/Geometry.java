@@ -43,6 +43,9 @@ import com.jme3.material.Material;
 import com.jme3.math.Matrix4f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.VertexBuffer.Type;
+import com.jme3.scene.node.GeometryGroupNode;
+import com.jme3.scene.node.Node;
+import com.jme3.scene.node.Spatial;
 import com.jme3.util.clone.Cloner;
 import com.jme3.util.clone.IdentityCloneFunction;
 import com.jme3.util.TempVars;
@@ -72,7 +75,7 @@ public class Geometry extends Spatial {
      * When true, the geometry's transform will not be applied.
      */
     protected boolean ignoreTransform = false;
-    protected transient Matrix4f cachedWorldMat = new Matrix4f();
+    private transient Matrix4f cachedWorldMat = new Matrix4f();
 
     /**
      * Specifies which {@link GeometryGroupNode} this <code>Geometry</code>
@@ -84,7 +87,7 @@ public class Geometry extends Spatial {
      * The start index of this <code>Geometry's</code> inside
      * the {@link GeometryGroupNode}.
      */
-    protected int startIndex = -1;
+    private int startIndex = -1;
 
     /**
      * Serialization only. Do not use.
@@ -340,7 +343,7 @@ public class Geometry extends Spatial {
         }
 
         this.groupNode = node;
-        this.startIndex = startIndex;
+        this.setStartIndex(startIndex);
     }
 
     /**
@@ -357,7 +360,7 @@ public class Geometry extends Spatial {
             groupNode = null;
 
             // change the default to -1 to make error detection easier
-            startIndex = -1;
+            setStartIndex(-1);
         }
     }
 
@@ -397,15 +400,15 @@ public class Geometry extends Spatial {
         checkDoTransformUpdate();
 
         // Compute the cached world matrix
-        cachedWorldMat.loadIdentity();
-        cachedWorldMat.setRotationQuaternion(worldTransform.getRotation());
-        cachedWorldMat.setTranslation(worldTransform.getTranslation());
+        getCachedWorldMat().loadIdentity();
+        getCachedWorldMat().setRotationQuaternion(worldTransform.getRotation());
+        getCachedWorldMat().setTranslation(worldTransform.getTranslation());
 
         TempVars vars = TempVars.get();
         Matrix4f scaleMat = vars.tempMat4;
         scaleMat.loadIdentity();
         scaleMat.scale(worldTransform.getScale());
-        cachedWorldMat.multLocal(scaleMat);
+        getCachedWorldMat().multLocal(scaleMat);
         vars.release();
     }
 
@@ -419,7 +422,7 @@ public class Geometry extends Spatial {
      * @return Matrix to transform from local space to world space
      */
     public Matrix4f getWorldMatrix() {
-        return cachedWorldMat;
+        return getCachedWorldMat();
     }
 
     /**
@@ -454,7 +457,7 @@ public class Geometry extends Spatial {
             // NOTE: BIHTree in mesh already checks collision with the
             // mesh's bound
             int prevSize = results.size();
-            int added = mesh.collideWith(other, cachedWorldMat, worldBound, results);
+            int added = mesh.collideWith(other, getCachedWorldMat(), worldBound, results);
             int newSize = results.size();
             for (int i = prevSize; i < newSize; i++) {
                 results.getCollisionDirect(i).setGeometry(this);
@@ -513,10 +516,10 @@ public class Geometry extends Spatial {
         // but the cloned one is not attached to anything, hence not managed.
         if (geomClone.isGrouped()) {
             geomClone.groupNode = null;
-            geomClone.startIndex = -1;
+            geomClone.setStartIndex(-1);
         }
 
-        geomClone.cachedWorldMat = cachedWorldMat.clone();
+        geomClone.setCachedWorldMat(getCachedWorldMat().clone());
         if (material != null) {
             if (cloneMaterial) {
                 geomClone.material = material.clone();
@@ -575,7 +578,7 @@ public class Geometry extends Spatial {
             } else {
                 // We are on our own now
                 this.groupNode = null;
-                this.startIndex = -1;
+                this.setStartIndex(-1);
             }
 
             // The above is based on the fact that if we were
@@ -584,7 +587,7 @@ public class Geometry extends Spatial {
             // this child.  Can't really be otherwise.
         }
 
-        this.cachedWorldMat = cloner.clone(cachedWorldMat);
+        this.setCachedWorldMat(cloner.clone(getCachedWorldMat()));
 
         // See if we are doing a shallow clone or a deep mesh clone
         boolean shallowClone = (cloner.getCloneFunction(Mesh.class) instanceof IdentityCloneFunction);
@@ -647,4 +650,20 @@ public class Geometry extends Spatial {
             }
         }
     }
+
+	public Matrix4f getCachedWorldMat() {
+		return cachedWorldMat;
+	}
+
+	public void setCachedWorldMat(Matrix4f cachedWorldMat) {
+		this.cachedWorldMat = cachedWorldMat;
+	}
+
+	public int getStartIndex() {
+		return startIndex;
+	}
+
+	public void setStartIndex(int startIndex) {
+		this.startIndex = startIndex;
+	}
 }

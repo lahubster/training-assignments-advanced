@@ -47,6 +47,7 @@ import com.jme3.scene.VertexBuffer.Format;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.VertexBuffer.Usage;
 import com.jme3.scene.mesh.*;
+import com.jme3.scene.node.Spatial;
 import com.jme3.util.BufferUtils;
 import com.jme3.util.IntMap;
 import com.jme3.util.IntMap.Entry;
