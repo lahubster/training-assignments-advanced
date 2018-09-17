@@ -29,90 +29,68 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene.debug;
-
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-import java.util.Map;
+package com.jme3.scenecreating.debug;
 
 import com.jme3.animation.Bone;
 import com.jme3.animation.Skeleton;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.VertexBuffer;
-import com.jme3.scene.VertexBuffer.Format;
-import com.jme3.scene.VertexBuffer.Type;
-import com.jme3.scene.VertexBuffer.Usage;
+import com.jme3.scenecreating.Mesh;
+import com.jme3.scenecreating.VertexBuffer;
+import com.jme3.scenecreating.VertexBuffer.Format;
+import com.jme3.scenecreating.VertexBuffer.Type;
+import com.jme3.scenecreating.VertexBuffer.Usage;
 import com.jme3.util.BufferUtils;
 
+import java.nio.FloatBuffer;
+import java.util.Map;
+
 /**
- * The class that displays either wires between the bones' heads if no length data is supplied and
- * full bones' shapes otherwise.
+ * The class that displays either heads of the bones if no length data is supplied or both heads and tails otherwise.
  */
-public class SkeletonWire extends Mesh {
-    /** The number of bones' connections. Used in non-length mode. */
-    private int                 numConnections;
+public class SkeletonPoints extends Mesh {
     /** The skeleton to be displayed. */
     private Skeleton            skeleton;
     /** The map between the bone index and its length. */
     private Map<Integer, Float> boneLengths;
 
     /**
-     * Creates a wire with no length data. The wires will be a connection between the bones' heads only.
+     * Creates a points with no length data. The points will only show the bone's heads.
      * @param skeleton
      *            the skeleton that will be shown
      */
-    public SkeletonWire(Skeleton skeleton) {
+    public SkeletonPoints(Skeleton skeleton) {
         this(skeleton, null);
     }
 
     /**
-     * Creates a wire with bone lengths data. If the data is supplied then the wires will show each full bone (from head to tail).
+     * Creates a points with bone lengths data. If the data is supplied then the points will show both head and tail of each bone.
      * @param skeleton
      *            the skeleton that will be shown
      * @param boneLengths
      *            a map between the bone's index and the bone's length
      */
-    public SkeletonWire(Skeleton skeleton, Map<Integer, Float> boneLengths) {
+    public SkeletonPoints(Skeleton skeleton, Map<Integer, Float> boneLengths) {
         this.skeleton = skeleton;
+        this.setMode(Mode.Points);
+        int pointsCount = skeleton.getBoneCount();
 
-        for (Bone bone : skeleton.getRoots()) {
-            this.countConnections(bone);
-        }
-
-        this.setMode(Mode.Lines);
-        int lineVerticesCount = skeleton.getBoneCount();
         if (boneLengths != null) {
             this.boneLengths = boneLengths;
-            lineVerticesCount *= 2;
+            pointsCount *= 2;
         }
 
         VertexBuffer pb = new VertexBuffer(Type.Position);
-        FloatBuffer fpb = BufferUtils.createFloatBuffer(lineVerticesCount * 3);
+        FloatBuffer fpb = BufferUtils.createFloatBuffer(pointsCount * 3);
         pb.setupData(Usage.Stream, 3, Format.Float, fpb);
         this.setBuffer(pb);
 
-        VertexBuffer ib = new VertexBuffer(Type.Index);
-        ShortBuffer sib = BufferUtils.createShortBuffer(boneLengths != null ? lineVerticesCount : numConnections * 2);
-        ib.setupData(Usage.Static, 2, Format.UnsignedShort, sib);
-        this.setBuffer(ib);
-
-        if (boneLengths != null) {
-            for (int i = 0; i < lineVerticesCount; ++i) {
-                sib.put((short) i);
-            }
-        } else {
-            for (Bone bone : skeleton.getRoots()) {
-                this.writeConnections(sib, bone);
-            }
-        }
-        sib.flip();
-
+        this.setPointSize(7);
         this.updateCounts();
+
     }
 
     /**
-     * The method updates the geometry according to the poitions of the bones.
+     * The method updates the geometry according to the positions of the bones.
      */
     public void updateGeometry() {
         VertexBuffer vb = this.getBuffer(Type.Position);
@@ -132,35 +110,5 @@ public class SkeletonWire extends Mesh {
         vb.updateData(posBuf);
 
         this.updateBound();
-    }
-
-    /**
-     * Th method couns the connections between bones.
-     * @param bone
-     *            the bone where counting starts
-     */
-    private void countConnections(Bone bone) {
-        for (Bone child : bone.getChildren()) {
-            numConnections++;
-            this.countConnections(child);
-        }
-    }
-
-    /**
-     * The method writes the indexes for the connection vertices. Used in non-length mode.
-     * @param indexBuf
-     *            the index buffer
-     * @param bone
-     *            the bone
-     */
-    private void writeConnections(ShortBuffer indexBuf, Bone bone) {
-        for (Bone child : bone.getChildren()) {
-            // write myself
-            indexBuf.put((short) skeleton.getBoneIndex(bone));
-            // write the child
-            indexBuf.put((short) skeleton.getBoneIndex(child));
-
-            this.writeConnections(indexBuf, child);
-        }
     }
 }

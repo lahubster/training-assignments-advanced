@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene.instancing;
+package com.jme3.scenecreating.instancing;
 
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
@@ -39,12 +39,12 @@ import com.jme3.export.Savable;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Matrix4f;
 import com.jme3.math.Quaternion;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.VertexBuffer;
-import com.jme3.scene.VertexBuffer.Format;
-import com.jme3.scene.VertexBuffer.Type;
-import com.jme3.scene.VertexBuffer.Usage;
 import com.jme3.scene.node.Spatial;
+import com.jme3.scenecreating.Geometry;
+import com.jme3.scenecreating.VertexBuffer;
+import com.jme3.scenecreating.VertexBuffer.Format;
+import com.jme3.scenecreating.VertexBuffer.Type;
+import com.jme3.scenecreating.VertexBuffer.Usage;
 import com.jme3.util.BufferUtils;
 import com.jme3.util.TempVars;
 import com.jme3.util.clone.Cloner;
@@ -91,10 +91,10 @@ public class InstancedGeometry extends Geometry {
      * Global user specified per-instance data.
      *
      * By default set to <code>null</code>, specify an array of VertexBuffers
-     * via {@link #setGlobalUserInstanceData(com.jme3.scene.VertexBuffer[]) }.
+     * via {@link #setGlobalUserInstanceData(com.jme3.scenecreating.VertexBuffer[]) }.
      *
      * @return global user specified per-instance data.
-     * @see #setGlobalUserInstanceData(com.jme3.scene.VertexBuffer[])
+     * @see #setGlobalUserInstanceData(com.jme3.scenecreating.VertexBuffer[])
      */
     public VertexBuffer[] getGlobalUserInstanceData() {
         return globalInstanceData;
@@ -129,7 +129,7 @@ public class InstancedGeometry extends Geometry {
      *
      * @return The per-instance transform data.
      *
-     * @see #setTransformUserInstanceData(com.jme3.scene.VertexBuffer)
+     * @see #setTransformUserInstanceData(com.jme3.scenecreating.VertexBuffer)
      */
     public VertexBuffer getTransformUserInstanceData() {
         return transformInstanceData;

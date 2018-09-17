@@ -29,21 +29,61 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene;
+package com.jme3.scenecreating.debug;
 
-import com.jme3.scene.node.Spatial;
+import com.jme3.math.Vector3f;
+import com.jme3.scenecreating.Mesh;
+import com.jme3.scenecreating.VertexBuffer;
+import com.jme3.scenecreating.VertexBuffer.Type;
+import com.jme3.scenecreating.VertexBuffer.Usage;
+import com.jme3.util.BufferUtils;
+import java.nio.FloatBuffer;
 
-/**
- * <code>SceneGraphVisitorAdapter</code> is used to traverse the scene
- * graph tree. 
- * Use by calling {@link Spatial#depthFirstTraversal(com.jme3.scene.SceneGraphVisitor) }
- * or {@link Spatial#breadthFirstTraversal(com.jme3.scene.SceneGraphVisitor)}.
- */
-public interface SceneGraphVisitor {
-    /**
-     * Called when a spatial is visited in the scene graph.
-     * 
-     * @param spatial The visited spatial
-     */
-    public void visit(Spatial spatial);
+public class WireFrustum extends Mesh {
+
+    public WireFrustum(Vector3f[] points){
+        if (points != null)
+            setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(points));
+
+        setBuffer(Type.Index, 2,
+                new short[]{
+                     0, 1,
+                     1, 2,
+                     2, 3,
+                     3, 0,
+
+                     4, 5,
+                     5, 6,
+                     6, 7,
+                     7, 4,
+
+                     0, 4,
+                     1, 5,
+                     2, 6,
+                     3, 7,
+                }
+        );
+        getBuffer(Type.Index).setUsage(Usage.Static);
+        setMode(Mode.Lines);
+    }
+
+    public void update(Vector3f[] points){
+        VertexBuffer vb = getBuffer(Type.Position);
+        if (vb == null){
+            setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(points));
+            return;
+        }
+
+        FloatBuffer b = BufferUtils.createFloatBuffer(points);
+        FloatBuffer a = (FloatBuffer) vb.getData();
+        b.rewind();
+        a.rewind();
+        a.put(b);
+        a.rewind();
+
+        vb.updateData(a);
+        
+        updateBound();
+    }
+
 }

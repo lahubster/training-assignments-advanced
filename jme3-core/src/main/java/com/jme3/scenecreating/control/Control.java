@@ -29,61 +29,49 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene.debug;
+package com.jme3.scenecreating.control;
 
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.VertexBuffer;
-import com.jme3.scene.VertexBuffer.Type;
-import com.jme3.scene.VertexBuffer.Usage;
-import com.jme3.util.BufferUtils;
-import java.nio.FloatBuffer;
+import com.jme3.export.Savable;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
+import com.jme3.scene.node.Spatial;
 
-public class WireFrustum extends Mesh {
+/**
+ * An interface for scene-graph controls. 
+ * <p>
+ * <code>Control</code>s are used to specify certain update and render logic
+ * for a {@link Spatial}. 
+ *
+ * @author Kirill Vainer
+ */
+public interface Control extends Savable {
 
-    public WireFrustum(Vector3f[] points){
-        if (points != null)
-            setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(points));
+    /**
+     * Creates a clone of the Control, the given Spatial is the cloned
+     * version of the spatial to which this control is attached to.
+     * @param spatial
+     * @return A clone of this control for the spatial
+     */
+    public Control cloneForSpatial(Spatial spatial);
 
-        setBuffer(Type.Index, 2,
-                new short[]{
-                     0, 1,
-                     1, 2,
-                     2, 3,
-                     3, 0,
+    /**
+     * @param spatial the spatial to be controlled. This should not be called
+     * from user code.
+     */
+    public void setSpatial(Spatial spatial);
 
-                     4, 5,
-                     5, 6,
-                     6, 7,
-                     7, 4,
+    /**
+     * Updates the control. This should not be called from user code.
+     * @param tpf Time per frame.
+     */
+    public void update(float tpf);
 
-                     0, 4,
-                     1, 5,
-                     2, 6,
-                     3, 7,
-                }
-        );
-        getBuffer(Type.Index).setUsage(Usage.Static);
-        setMode(Mode.Lines);
-    }
-
-    public void update(Vector3f[] points){
-        VertexBuffer vb = getBuffer(Type.Position);
-        if (vb == null){
-            setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(points));
-            return;
-        }
-
-        FloatBuffer b = BufferUtils.createFloatBuffer(points);
-        FloatBuffer a = (FloatBuffer) vb.getData();
-        b.rewind();
-        a.rewind();
-        a.put(b);
-        a.rewind();
-
-        vb.updateData(a);
-        
-        updateBound();
-    }
-
+    /**
+     * Should be called prior to queuing the spatial by the RenderManager. This
+     * should not be called from user code.
+     *
+     * @param rm
+     * @param vp
+     */
+    public void render(RenderManager rm, ViewPort vp);
 }

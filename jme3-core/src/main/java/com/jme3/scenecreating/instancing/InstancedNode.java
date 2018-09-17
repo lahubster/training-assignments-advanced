@@ -29,18 +29,18 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene.instancing;
+package com.jme3.scenecreating.instancing;
 
 import com.jme3.material.Material;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.UserData;
-import com.jme3.scene.control.Control;
 import com.jme3.scene.node.GeometryGroupNode;
 import com.jme3.scene.node.Node;
 import com.jme3.scene.node.Spatial;
+import com.jme3.scenecreating.Geometry;
+import com.jme3.scenecreating.Mesh;
+import com.jme3.scenecreating.UserData;
+import com.jme3.scenecreating.control.Control;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.material.MatParam;

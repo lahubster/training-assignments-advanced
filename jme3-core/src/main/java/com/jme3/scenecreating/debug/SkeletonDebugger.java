@@ -29,14 +29,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene.debug;
+package com.jme3.scenecreating.debug;
 
 import java.util.Map;
 
 import com.jme3.animation.Skeleton;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.node.Node;
+import com.jme3.scenecreating.Geometry;
 
 /**
  * The class that creates a mesh to display how bones behave.

@@ -29,49 +29,21 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene.control;
+package com.jme3.scenecreating;
 
-import com.jme3.export.Savable;
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.scene.node.Spatial;
 
 /**
- * An interface for scene-graph controls. 
- * <p>
- * <code>Control</code>s are used to specify certain update and render logic
- * for a {@link Spatial}. 
- *
- * @author Kirill Vainer
+ * <code>SceneGraphVisitorAdapter</code> is used to traverse the scene
+ * graph tree. 
+ * Use by calling {@link Spatial#depthFirstTraversal(com.jme3.scenecreating.SceneGraphVisitor) }
+ * or {@link Spatial#breadthFirstTraversal(com.jme3.scenecreating.SceneGraphVisitor)}.
  */
-public interface Control extends Savable {
-
+public interface SceneGraphVisitor {
     /**
-     * Creates a clone of the Control, the given Spatial is the cloned
-     * version of the spatial to which this control is attached to.
-     * @param spatial
-     * @return A clone of this control for the spatial
+     * Called when a spatial is visited in the scene graph.
+     * 
+     * @param spatial The visited spatial
      */
-    public Control cloneForSpatial(Spatial spatial);
-
-    /**
-     * @param spatial the spatial to be controlled. This should not be called
-     * from user code.
-     */
-    public void setSpatial(Spatial spatial);
-
-    /**
-     * Updates the control. This should not be called from user code.
-     * @param tpf Time per frame.
-     */
-    public void update(float tpf);
-
-    /**
-     * Should be called prior to queuing the spatial by the RenderManager. This
-     * should not be called from user code.
-     *
-     * @param rm
-     * @param vp
-     */
-    public void render(RenderManager rm, ViewPort vp);
+    public void visit(Spatial spatial);
 }

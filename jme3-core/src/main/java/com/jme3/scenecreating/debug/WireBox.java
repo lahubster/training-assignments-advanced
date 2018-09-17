@@ -29,16 +29,16 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene.debug;
+package com.jme3.scenecreating.debug;
 
 import com.jme3.bounding.BoundingBox;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.VertexBuffer;
-import com.jme3.scene.VertexBuffer.Format;
-import com.jme3.scene.VertexBuffer.Type;
-import com.jme3.scene.VertexBuffer.Usage;
+import com.jme3.scenecreating.Geometry;
+import com.jme3.scenecreating.Mesh;
+import com.jme3.scenecreating.VertexBuffer;
+import com.jme3.scenecreating.VertexBuffer.Format;
+import com.jme3.scenecreating.VertexBuffer.Type;
+import com.jme3.scenecreating.VertexBuffer.Usage;
 import com.jme3.util.BufferUtils;
 import java.nio.FloatBuffer;
 

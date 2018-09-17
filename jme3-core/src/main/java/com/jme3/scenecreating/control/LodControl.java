@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.scene.control;
+package com.jme3.scenecreating.control;
 
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.export.InputCapsule;
@@ -40,9 +40,9 @@ import com.jme3.math.FastMath;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.node.Spatial;
+import com.jme3.scenecreating.Geometry;
+import com.jme3.scenecreating.Mesh;
 import com.jme3.util.clone.Cloner;
 import com.jme3.util.clone.JmeCloneable;
 import java.io.IOException;
