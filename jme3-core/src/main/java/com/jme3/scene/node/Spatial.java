@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.node;
+package com.jme3.scene.node;
 
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.CloneableSmartAsset;
@@ -1812,7 +1812,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Visit each scene graph element ordered by DFS with the default post order mode.
      * @param visitor
-     * @see #depthFirstTraversal(com.jme3.scene.SceneGraphVisitor, com.jme3.node.Spatial.DFSMode) 
+     * @see #depthFirstTraversal(com.jme3.scene.SceneGraphVisitor, com.jme3.scene.node.Spatial.DFSMode) 
      */
     public void depthFirstTraversal(SceneGraphVisitor visitor) {
         depthFirstTraversal(visitor, DFSMode.POST_ORDER);
