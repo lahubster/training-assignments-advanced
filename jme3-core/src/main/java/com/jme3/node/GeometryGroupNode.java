@@ -1,4 +1,4 @@
-package com.jme3.scene.node;
+package com.jme3.node;
 
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
